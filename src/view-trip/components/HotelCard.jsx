@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { GetPlaceDetails, PHOTO_REF_URL } from '../../service/globalAPI';
 
 function HotelCard({ hotel }) {
     const [photoUrl, setPhotoUrl] = useState('');
+
     const GetPhoto = async () => {
         const data = {
-            textQuery: hotel?.hotelName
+            textQuery: hotel?.hotelName,
         };
-        const result = await GetPlaceDetails(data).then(resp => {
+        const result = await GetPlaceDetails(data).then((resp) => {
             const photo_url = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[0].name);
             setPhotoUrl(photo_url);
         });
@@ -16,21 +17,29 @@ function HotelCard({ hotel }) {
 
     useEffect(() => {
         hotel && GetPhoto();
-    }, [hotel])
-    return (
-        <Link to={'https://www.google.com/maps/search/?api=1&query=' + hotel?.hotelName + hotel?.hotelAddress} target='_blank' rel='noreferrer'>
-            <div className='bg-white shadow-md p-5 mt-5 hover:scale-105 transition-all'>
-                <img src={photoUrl ? photoUrl : '/placeholder.png'} className='w-full h-40 object-cover rounded-xl' />
-                <div className='my-2'>
-                    <h2 className='font-medium '>{hotel?.hotelName}</h2>
-                    <h2 className='text-xs text-gray-500'>📍 {hotel?.hotelAddress}</h2>
-                    <h2 className='text-sm text-[#7F57F1]'>💰 {hotel?.price}</h2>
-                    <h2 className='text-sm '>⭐️ {hotel?.rating}</h2>
+    }, [hotel]);
 
+    return (
+        <Link
+            to={`https://www.google.com/maps/search/?api=1&query=${hotel?.hotelName} ${hotel?.hotelAddress}`}
+            target="_blank"
+            rel="noreferrer"
+        >
+            <div className="bg-white shadow-md p-4 sm:p-5 mt-4 sm:mt-5 hover:scale-105 transition-transform rounded-lg">
+                <img
+                    src={photoUrl ? photoUrl : '/placeholder.png'}
+                    alt={hotel?.hotelName}
+                    className="w-full h-32 sm:h-40 object-cover rounded-lg"
+                />
+                <div className="mt-3">
+                    <h2 className="font-medium text-base sm:text-lg">{hotel?.hotelName}</h2>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">📍 {hotel?.hotelAddress}</p>
+                    <p className="text-sm sm:text-base text-[#7F57F1] mt-1">💰 {hotel?.price}</p>
+                    <p className="text-sm sm:text-base mt-1">⭐️ {hotel?.rating}</p>
                 </div>
             </div>
         </Link>
-    )
+    );
 }
 
-export default HotelCard
+export default HotelCard;

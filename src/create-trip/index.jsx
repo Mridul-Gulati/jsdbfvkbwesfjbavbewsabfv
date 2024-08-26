@@ -1,5 +1,4 @@
-import { Input } from '../components/UI/input';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { AI_PROMPT, SelectBudgetList, SelectTravelList } from '../constants/options';
 import { Button } from '../components/UI/Button';
@@ -12,7 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "../components/UI/dialog"
+} from "../components/UI/dialog";
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
@@ -20,6 +19,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { db } from '../service/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
+import { Input } from '../components/UI/input';
 
 function CreateTrip() {
     const [place, setPlace] = useState();
@@ -31,7 +31,7 @@ function CreateTrip() {
 
     const handleInputChange = (name, value) => {
         setData({ ...data, [name]: value });
-    }
+    };
 
     const login = useGoogleLogin({
         onSuccess: (codeResp) => getUserProfile(codeResp?.access_token),
@@ -70,7 +70,7 @@ function CreateTrip() {
             console.log('Error generating trip:', error);
             setLoading(false);
         }
-    }
+    };
 
     const saveTrip = async (tripData) => {
         setLoading(true);
@@ -101,7 +101,7 @@ function CreateTrip() {
             setLoading(false);
             toast('Error saving trip. Please try again.');
         }
-    }
+    };
 
     const getUserProfile = async (tokenInfo) => {
         try {
@@ -118,20 +118,20 @@ function CreateTrip() {
             console.log('Error in API call:', error);
             setOpenDialog(false);
         }
-    }
+    };
 
     return (
         <div className='flex justify-center mt-10'>
-            <div className='bg-white sm:px-10 md:px-32 lg:px-56 xl:px-10 px-5 py-10 shadow-lg rounded-lg max-w-3xl w-full'>
-                <h2 className='font-bold text-3xl'>
+            <div className='bg-white px-5 py-10 sm:px-10 md:px-20 lg:px-32 xl:px-40 shadow-lg rounded-lg max-w-4xl w-full'>
+                <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl'>
                     Create Your <span className='text-[#7F57F1]'>Dream Trip</span> 🏝️
                 </h2>
-                <p className='mt-3 text-gray-500 text-xl'>
+                <p className='mt-3 text-gray-500 text-base md:text-lg lg:text-xl'>
                     Welcome to your journey's starting point! Here, you can create a personalized travel itinerary that perfectly aligns with your interests, budget, and schedule.
                 </p>
-                <div className='mt-16 flex flex-col gap-10'>
+                <div className='mt-12 md:mt-16 flex flex-col gap-8 md:gap-10'>
                     <div>
-                        <h2 className='text-xl my-3 font-medium'>What is your dream destination?</h2>
+                        <h2 className='text-lg md:text-xl lg:text-2xl my-3 font-medium'>What is your dream destination?</h2>
                         <GooglePlacesAutocomplete
                             apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
                             selectProps={{
@@ -141,15 +141,15 @@ function CreateTrip() {
                         />
                     </div>
                     <div>
-                        <h2 className='text-xl my-3 font-medium'>How long will your trip be?</h2>
+                        <h2 className='text-lg md:text-xl lg:text-2xl my-3 font-medium'>How long will your trip be?</h2>
                         <Input placeholder={'Enter number of days'} type="number" onChange={(e) => handleInputChange('numDays', e.target.value)} />
                     </div>
                     <div>
-                        <h2 className='text-xl my-3 font-medium'>What is your budget?</h2>
-                        <div className='grid grid-cols-3 gap-5 mt-5 cursor-pointer'>
+                        <h2 className='text-lg md:text-xl lg:text-2xl my-3 font-medium'>What is your budget?</h2>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5 cursor-pointer'>
                             {SelectBudgetList.map((item, index) => (
                                 <div key={index} onClick={() => handleInputChange('budget', item.title)} className={`p-4 border rounded-lg hover:shadow-lg ${data?.budget == item.title && 'border-[#7F57F1] shadow-lg'}`}>
-                                    <h2 className='text-4xl'>{item.icon}</h2>
+                                    <h2 className='text-3xl md:text-4xl'>{item.icon}</h2>
                                     <h2 className='font-bold text-lg'>{item.title}</h2>
                                     <h2 className='text-sm text-gray-500'>{item.desc}</h2>
                                 </div>
@@ -157,11 +157,11 @@ function CreateTrip() {
                         </div>
                     </div>
                     <div>
-                        <h2 className='text-xl my-3 font-medium'>Who all will accompany you?</h2>
-                        <div className='grid grid-cols-3 gap-5 mt-5 cursor-pointer'>
+                        <h2 className='text-lg md:text-xl lg:text-2xl my-3 font-medium'>Who all will accompany you?</h2>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5 cursor-pointer'>
                             {SelectTravelList.map((item, index) => (
                                 <div key={index} onClick={() => handleInputChange('people', item.people)} className={`p-4 border rounded-lg hover:shadow-lg ${data?.people == item.people && 'border-[#7F57F1] shadow-lg'}`}>
-                                    <h2 className='text-4xl'>{item.icon}</h2>
+                                    <h2 className='text-3xl md:text-4xl'>{item.icon}</h2>
                                     <h2 className='font-bold text-lg'>{item.title}</h2>
                                     <h2 className='text-sm text-gray-500'>{item.desc}</h2>
                                 </div>

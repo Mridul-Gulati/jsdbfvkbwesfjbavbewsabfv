@@ -15,11 +15,13 @@ import {
     DialogTrigger,
 } from "../../components/UI/dialog"
 import { FcGoogle } from 'react-icons/fc';
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import axios from 'axios';
 
 function Header() {
     const user = JSON.parse(localStorage.getItem('user'));
     const [openDialog, setOpenDialog] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const login = useGoogleLogin({
         onSuccess: (codeResp) => getUserProfile(codeResp?.access_token),
@@ -50,36 +52,52 @@ function Header() {
         <div className='p-3 shadow-sm flex justify-between items-center'>
             <a href='/'>
                 <div className='flex gap-2 items-center'>
-                    <img className='h-[50px] rounded-full w-[65px]' src='./logo.png' alt='logo' />
+                    <img className='h-10 w-10 rounded-full' src='./logo.png' alt='logo' />
                     <h1 className='font-bold text-xl'>Wander <span className='text-[#7F57F1]'>Together</span></h1>
                 </div>
             </a>
 
-            <div>
+            <div className='flex md:hidden items-center'>
+                {menuOpen ? (
+                    <AiOutlineClose onClick={() => setMenuOpen(!menuOpen)} className='cursor-pointer w-8 h-8' />
+                ) : (
+                    <AiOutlineMenu onClick={() => setMenuOpen(!menuOpen)} className='cursor-pointer w-8 h-8' />
+                )}
+            </div>
+
+            <div className={`flex-col md:flex-row md:flex ${menuOpen ? 'flex' : 'hidden'} absolute md:relative top-16 left-0 md:top-0 md:left-auto md:space-x-4 bg-white md:bg-transparent w-full md:w-auto p-4 md:p-0 shadow-md md:shadow-none z-10`}>
                 {user ?
-                    <div className='flex gap-2 items-center'>
+                    <div className='flex flex-col md:flex-row md:items-center gap-2'>
                         <a href='/create-trip'>
-                            <Button variant='outline' className='rounded-full'>+ Create Trip</Button>
+                            <Button variant='outline' className='rounded-full w-full md:w-auto'>+ Create Trip</Button>
                         </a>
                         <a href='/my-trips'>
-                            <Button variant='outline' className='rounded-full'> My Trips </Button>
+                            <Button variant='outline' className='rounded-full w-full md:w-auto'>My Trips</Button>
                         </a>
-                        <Popover>
-                            <PopoverTrigger>
-                                <img src={user?.picture} alt='user' className='h-[40px] w-[40px] rounded-full' />
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <h2 className='cursor-pointer' onClick={() => {
-                                    googleLogout();
-                                    localStorage.clear();
-                                    window.location.reload();
-                                }}>Logout</h2>
-                            </PopoverContent>
-                        </Popover>
+                        <div className='hidden md:flex items-center'>
+                            <Popover>
+                                <PopoverTrigger>
+                                    <img src={user?.picture} alt='user' className='h-10 w-10 rounded-full' />
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <Button variant='outline' className='rounded-full w-full md:w-auto' onClick={() => {
+                                        googleLogout();
+                                        localStorage.clear();
+                                        window.location.reload();
+                                    }}>Logout</Button>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <Button variant='outline' className='rounded-full w-full md:w-auto' onClick={() => {
+                            googleLogout();
+                            localStorage.clear();
+                            window.location.reload();
+                        }}>Logout</Button>
                     </div> :
-                    <Button onClick={() => setOpenDialog(true)}>Sign In</Button>
+                    <Button onClick={() => setOpenDialog(true)} className='w-full md:w-auto'>Sign In</Button>
                 }
             </div>
+
 
             <Dialog open={openDialog} onOpenChange={setOpenDialog}>
                 <DialogContent>

@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { db } from '../../service/firebaseConfig';
 import { toast } from 'sonner';
 import InfoSection from '../components/information';
@@ -10,11 +10,11 @@ import Footer from '../components/Footer';
 
 function ViewTrip() {
     const { tripId } = useParams();
-    const [trip, setTrip] = useState([]);
+    const [trip, setTrip] = useState(null);
 
     useEffect(() => {
         tripId && getTrip();
-    }, [tripId])
+    }, [tripId]);
 
     const getTrip = async () => {
         const docRef = doc(db, 'trips', tripId);
@@ -22,22 +22,26 @@ function ViewTrip() {
 
         if (docSnap.exists()) {
             setTrip(docSnap.data());
-        }
-        else {
+        } else {
             toast('Trip not found');
         }
-    }
+    };
+
     return (
-        <div className='p-10 md:px-20 lg:px-44 xl:px-56'>
-            <InfoSection trip={trip} />
+        <div className='p-5 sm:p-10 md:px-16 lg:px-28 xl:px-36'>
+            {trip && (
+                <>
+                    <InfoSection trip={trip} />
 
-            <Hotels trip={trip} />
+                    <Hotels trip={trip} />
 
-            <Routine trip={trip} />
+                    <Routine trip={trip} />
 
-            <Footer trip={trip} />
+                    <Footer trip={trip} />
+                </>
+            )}
         </div>
-    )
+    );
 }
 
-export default ViewTrip
+export default ViewTrip;
