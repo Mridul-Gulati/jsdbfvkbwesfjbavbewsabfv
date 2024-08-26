@@ -4,7 +4,7 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover"
+} from "../../components/UI/popover"
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import {
     Dialog,
@@ -13,7 +13,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
+} from "../../components/UI/dialog"
 import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
 

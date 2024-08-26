@@ -7,7 +7,7 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover"
+} from "../../components/UI/popover"
 import { ShareSocial } from 'react-share-social'
 
 function InfoSection({ trip }) {
